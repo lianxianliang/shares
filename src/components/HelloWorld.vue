@@ -405,7 +405,7 @@ export default {
       this.isEndPre = false;
       this.isEndReal = false;
       this.tableData = [];
-      this.handleClickDiff();
+      // this.handleClickDiff();
       this.xAxis = [];
       this.dataReal = [];
       this.dataPre = [];
