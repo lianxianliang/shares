@@ -10,10 +10,15 @@
       :label="'域名' + index"
       :key="domain.key"
     >
+      <span
+        class="percent"
+        v-if="index>0"
+        :class="(domain.price/dynamicValidateForm.domains[index-1].price-1)>0?'red':'green'"
+      >{{((domain.price/dynamicValidateForm.domains[index-1].price-1)*100).toFixed(2)}}%</span>
       <el-input-number
         v-model="domain.price"
         :precision="2"
-        :step="0.1"
+        :step="0.01"
         @change="submitForm()"
       ></el-input-number>
       <el-input-number
@@ -41,7 +46,7 @@
       <el-input-number
         v-model="all.price"
         :precision="2"
-        :step="0.1"
+        :step="0.01"
         disabled
       ></el-input-number>
       <el-input-number
@@ -54,6 +59,24 @@
         :value="all.money"
         disabled
       ></el-input-number>
+    </el-form-item>
+
+    <el-form-item label="">
+      <span
+        class="percent"
+        :class="(end_price/all.price-1)>0?'red':'green'"
+      >{{((end_price/all.price-1)*100).toFixed(2)}}%</span>
+      <el-input-number
+        v-model="end_price"
+        :precision="2"
+        :step="0.01"
+      ></el-input-number>
+      <el-input-number
+        :value="(end_price-all.price)*all.shares"
+        :precision="0"
+        disabled
+      ></el-input-number>
+      <el-input-number disabled></el-input-number>
     </el-form-item>
 
   </el-form>
@@ -73,8 +96,9 @@ export default {
       all: {
         price: 10,
         shares: 100,
-        money: 1000
-      }
+        money: 1000,
+      },
+      end_price: 10.3
     };
   },
   methods: {
@@ -122,6 +146,18 @@ export default {
       position: absolute;
       right: -69px;
       top: 0;
+    }
+    .percent {
+      position: absolute;
+      left: 50%;
+      top: 0;
+      margin-left: -330px;
+      &.green {
+        color: #109e10;
+      }
+      &.red {
+        color: #dc0f0f;
+      }
     }
   }
 }
