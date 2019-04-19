@@ -79,6 +79,26 @@
       <el-input-number disabled></el-input-number>
     </el-form-item>
 
+    <el-form-item label="持有时间">
+      <el-date-picker
+        v-model="date"
+        type="daterange"
+        range-separator="至"
+        start-placeholder="开始日期"
+        end-placeholder="结束日期"
+        @change="onChangeDate"
+      >
+      </el-date-picker>
+    </el-form-item>
+
+    <el-form-item label="实际投资周期">
+      <div>{{cycle}}天</div>
+    </el-form-item>
+
+    <el-form-item label="实际日均">
+      <div>{{cycle===0?'0':((end_price-all.price)*all.shares / cycle).toFixed(2)}}</div>
+    </el-form-item>
+
   </el-form>
 </template>
 
@@ -89,16 +109,18 @@ export default {
       dynamicValidateForm: {
         domains: [{
           price: 10,
-          shares: 100
+          shares: 5000
         }],
         email: ''
       },
       all: {
         price: 10,
-        shares: 100,
-        money: 1000,
+        shares: 5000,
+        money: 50000,
       },
-      end_price: 10.3
+      end_price: 10.3,
+      date: [new Date(), new Date(+new Date() + 6 * 24 * 60 * 60 * 1000)],
+      cycle: (+new Date(+new Date() + 6 * 24 * 60 * 60 * 1000) - (+new Date())) / (1 * 24 * 60 * 60 * 1000) + 1
     };
   },
   methods: {
@@ -128,9 +150,20 @@ export default {
     addDomain() {
       this.dynamicValidateForm.domains.push({
         price: 10,
-        shares: 100,
+        shares: 5000,
         key: Date.now()
       });
+    },
+    onChangeDate() {
+      // 开始买入时间
+      let startDate = this.date[0];
+
+      // 终止买入时间
+      let endDate = this.date[1];
+
+      // 投资周期
+      this.cycle = (+new Date(endDate) - (+new Date(startDate))) / (1 * 24 * 60 * 60 * 1000) + 1;
+
     }
   }
 }
