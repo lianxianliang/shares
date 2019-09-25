@@ -29,6 +29,7 @@
       ></el-input-number>
       <el-input-number
         :value="domain.price*domain.shares"
+        :precision="0"
         disabled
       ></el-input-number>
       <el-button
